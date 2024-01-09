@@ -27,4 +27,5 @@ public class BoardUtils {
         return column;
 
     }
+
 }
