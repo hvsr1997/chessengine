@@ -58,11 +58,11 @@ public class Rook extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
-    private static boolean isFirstColumnExclusion(final int currentPopsition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPopsition] && ((candidateOffset == -1));
+    private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
+        return BoardUtils.FIRST_COLUMN[currentPosition] && ((candidateOffset == -1));
     }
 
-    private static boolean isEighthColumnExclusion(final int currentPopsition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPopsition] && ((candidateOffset == 1));
+    private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && ((candidateOffset == 1));
     }
 }
