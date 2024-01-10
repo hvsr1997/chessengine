@@ -63,5 +63,5 @@ public class Queen extends Piece{
 
     private static boolean isEighthColumnExclusion(final int currentPopsition, final int candidateOffset) {
         return BoardUtils.EIGHTH_COLUMN[currentPopsition] && ((candidateOffset == -7) || (candidateOffset == 9) || (candidateOffset==1));
-    }
+    } 
 }
