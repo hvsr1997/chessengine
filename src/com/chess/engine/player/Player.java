@@ -28,10 +28,18 @@ public abstract class Player {
 
     }
 
+    public King getPlayerKing() {
+        return this.playerKing;
+    }
+
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
+    }
+
     private static Collection<Move> calculateAttackOnTile(int piecePosition, Collection<Move> opponentMoves) {
         final List<Move> attackMoves = new ArrayList<>();
-        for(final Move move : attackMoves) {
-            if(piecePosition == move.getDestinationCoordinate()) {
+        for (final Move move : attackMoves) {
+            if (piecePosition == move.getDestinationCoordinate()) {
                 attackMoves.add(move);
             }
         }
@@ -40,42 +48,61 @@ public abstract class Player {
 
 
     private King establishKing() {
-        for(final Piece piece : getActivePieces()){
-            if(piece.getPieceType().isKing()) {
+        for (final Piece piece : getActivePieces()) {
+            if (piece.getPieceType().isKing()) {
                 return (King) piece;
             }
         }
         throw new RuntimeException("not a valid board");
     }
+
     public boolean isMoveLegal(Move move) {
         return this.legalMoves.contains(move);
     }
+
     public boolean isInCheck() {
         return this.isInCheck;
     }
+
     public boolean isInCheckMate() {
         return this.isInCheck && !hasEscapeMoves();
     }
+
     public boolean isInStaleMate() {
         return !this.isInCheck && !hasEscapeMoves();
     }
+
     public boolean isCastled() {
         return false;
     }
+
     public MoveTransition makeMove(final Move move) {
-        return null;
+        if (!isMoveLegal(move)) {
+            return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        }
+        final Board transitionBoard = move.execute();
+        final Collection<Move> kingAttacks = Player.calculateAttackOnTile(transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
+                transitionBoard.currentPlayer().getLegalMoves());
+
+        if(!kingAttacks.isEmpty()) {
+            return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+        }
+        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
     protected boolean hasEscapeMoves() {
-        for(final Move move: this.legalMoves) {
+        for (final Move move : this.legalMoves) {
             final MoveTransition transition = makeMove(move);
-            if(transition.getMoveStatus().isDone()) {
+            if (transition.getMoveStatus().isDone()) {
                 return true;
             }
         }
         return false;
     }
+
     public abstract Collection<Piece> getActivePieces();
+
     public abstract Alliance getAlliance();
+
     public abstract Player getOpponent();
 }
