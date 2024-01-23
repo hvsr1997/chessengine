@@ -5,14 +5,18 @@ import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 import com.chess.engine.piece.King;
 import com.chess.engine.piece.Piece;
+import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public abstract class Player {
 
     protected final Board board;
     protected final King playerKing;
     protected final Collection<Move> legalMoves;
+    private final boolean isInCheck;
 
     protected Player(final Board board,
                      final Collection<Move> legalMoves,
@@ -20,11 +24,23 @@ public abstract class Player {
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = legalMoves;
+        this.isInCheck = !Player.calculateAttackOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
 
     }
 
+    private static Collection<Move> calculateAttackOnTile(int piecePosition, Collection<Move> opponentMoves) {
+        final List<Move> attackMoves = new ArrayList<>();
+        for(final Move move : attackMoves) {
+            if(piecePosition == move.getDestinationCoordinate()) {
+                attackMoves.add(move);
+            }
+        }
+        return ImmutableList.copyOf(attackMoves);
+    }
+
+
     private King establishKing() {
-        for(final Piece piece : getMyActivePieces()){
+        for(final Piece piece : getActivePieces()){
             if(piece.getPieceType().isKing()) {
                 return (King) piece;
             }
@@ -35,13 +51,13 @@ public abstract class Player {
         return this.legalMoves.contains(move);
     }
     public boolean isInCheck() {
-        return false;
+        return this.isInCheck;
     }
     public boolean isInCheckMate() {
-        return false;
+        return this.isInCheck && !hasEscapeMoves();
     }
     public boolean isInStaleMate() {
-        return false;
+        return !this.isInCheck && !hasEscapeMoves();
     }
     public boolean isCastled() {
         return false;
@@ -50,7 +66,16 @@ public abstract class Player {
         return null;
     }
 
-    public abstract Collection<Piece> getMyActivePieces();
+    protected boolean hasEscapeMoves() {
+        for(final Move move: this.legalMoves) {
+            final MoveTransition transition = makeMove(move);
+            if(transition.getMoveStatus().isDone()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
 }
