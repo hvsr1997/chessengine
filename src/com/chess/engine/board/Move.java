@@ -28,6 +28,19 @@ public abstract class Move {
 
         @Override
         public Board execute() {
+            final Board.Builder builder = new Board.Builder();
+            for(final Piece piece: this.board.currentPlayer().getActivePieces()) {
+                if(!this.movedPiece.equals(piece)) {
+                    builder.setPiece(piece);
+                }
+            }
+
+            for(final Piece piece: this.board.currentPlayer().getOpponent().getActivePieces()) {
+                builder.setPiece(piece);
+            }
+
+            builder.setPiece(null);
+            builder.setNextMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             return null;
         }
     }
