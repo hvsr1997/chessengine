@@ -8,6 +8,10 @@ public abstract class Move {
     final Piece movedPiece;
     final int destinationCoordinate;
 
+    public Piece getMovedPiece(){
+        return this.movedPiece;
+    }
+
     private Move(Board board, Piece movedPiece, int destinationCoordinate) {
         this.board = board;
         this.movedPiece = movedPiece;
@@ -39,9 +43,9 @@ public abstract class Move {
                 builder.setPiece(piece);
             }
 
-            builder.setPiece(null);
+            builder.setPiece(this.movedPiece.movePiece(this));
             builder.setNextMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
-            return null;
+            return builder.build();
         }
     }
 

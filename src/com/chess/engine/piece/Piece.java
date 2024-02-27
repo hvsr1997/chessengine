@@ -37,6 +37,8 @@ public abstract class Piece {
         return this.pieceType;
     }
 
+    public abstract Piece movePiece(Move move);
+
     public enum PieceType{
         PAWN("P") {
             @Override
