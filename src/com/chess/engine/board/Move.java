@@ -220,8 +220,8 @@ public abstract class Move {
 
     public static final class KingSideCastleMove extends CastleMove {
 
-        private KingSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
-                                   final Rook castleRook, final int castleRookStart, final int castleRookDestination) {
+        public KingSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
+                                  final Rook castleRook, final int castleRookStart, final int castleRookDestination) {
             super(board, movedPiece, destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
         }
 
@@ -233,8 +233,8 @@ public abstract class Move {
 
     public static final class QueenSideCastleMove extends CastleMove {
 
-        private QueenSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
-                                    final Rook castleRook, final int castleRookStart, final int castleRookDestination) {
+        public QueenSideCastleMove(Board board, Piece movedPiece, int destinationCoordinate,
+                                   final Rook castleRook, final int castleRookStart, final int castleRookDestination) {
             super(board, movedPiece, destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
         }
 
